@@ -13,24 +13,42 @@ router.all('*', (req, res, next) => {
 })
 
 router.get('/', (req, res) => {
-  // const newsData = new News({
-  //   title: 'Title testing',
-  //   description: 'description testing is this working?'
-  // })
+  News.find({}, (err, data) => {
+    console.log(data);
 
-  // newsData.save((err) => {
-  //   console.log(err);
-  // })
+    res.render('admin/index', { title: 'Admin panel', data });
+  })
 
-
-  res.render('admin/index', { title: 'Admin panel' });
 });
 
 
 router.get('/news/add', (req, res) => {
+  res.render('admin/news-form', { title: 'Create News', body: {}, errors: {} });
+})
 
-  
-  res.render('admin/news-form', { title: 'Create News' });
+router.post('/news/add', (req, res) => {
+  const body = req.body;
+
+  const newsData = new News(body);
+  const errors = newsData.validateSync();
+
+  console.log(errors, 'sratat');
+
+  newsData.save((err) => {
+    if(err) {
+      res.render('admin/news-form', { title: 'Create News', body, errors: errors});
+      return;
+    } 
+    res.redirect('/admin');
+  })
+
+})
+
+router.get('/news/delete/:id', (req, res) => {
+
+  News.findByIdAndDelete(req.params.id, (err) => {
+    res.redirect('/admin')
+  })
 
 })
 
