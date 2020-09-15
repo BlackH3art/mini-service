@@ -14,7 +14,6 @@ router.all('*', (req, res, next) => {
 
 router.get('/', (req, res) => {
   News.find({}, (err, data) => {
-    console.log(data);
 
     res.render('admin/index', { title: 'Admin panel', data });
   })
@@ -32,7 +31,6 @@ router.post('/news/add', (req, res) => {
   const newsData = new News(body);
   const errors = newsData.validateSync();
 
-  console.log(errors, 'sratat');
 
   newsData.save((err) => {
     if(err) {
