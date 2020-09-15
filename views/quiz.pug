@@ -2,4 +2,23 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  if show
+    form(method='post')
+      h2 In your opinion, is React the best framework?
+      ul
+        each answer in data
+          li
+            label=answer.title
+            input(type='radio' name='quiz' value=answer._id)
+      input(type='submit' value='Vote')
+      p If you want to see results, submit your vote.
+  else
+    h2 You already voted in this polling!
+    p Results:
+    ul
+    each answer in data
+      li #{answer.title} (#{answer.vote}) which is: #{Math.floor(answer.vote/sum*100)}%
+    
+    p Total votes: #{sum}
+
+    
